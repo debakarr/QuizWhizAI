@@ -1,6 +1,19 @@
-Simple streamlit application to generate unlimited quiz on any topic using ChatGPT API.
+# :question: QuizWhizAI 
 
-Link to the app: https://quizwhizai.streamlit.app/
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://quizwhizai.streamlit.app)
+
+<div align="center">
+   <img src="https://i.imgur.com/Yzfn90l.png">
+   <br>
+   <strong><i>Simple streamlit application to generate unlimited quiz on any topic using ChatGPT API.</i></strong>
+   <br>
+</div>
+
+---
+
+**Streamlit App:** https://quizwhizai.streamlit.app
+
+---
 
 ## How to generate OpenAI API key
 
