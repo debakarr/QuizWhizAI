@@ -33,4 +33,5 @@ def get_quiz_from_topic(topic: str, api_key: str) -> Dict[str, str]:
     quiz = response["choices"][0]["message"]["content"]
     current_assistent_message = {"role": "assistant", "content": quiz}
     chat_history.append(current_assistent_message)
+    print(f"Response:\n{quiz}")
     return json.loads(quiz)

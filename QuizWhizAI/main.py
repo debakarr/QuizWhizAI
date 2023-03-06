@@ -1,3 +1,4 @@
+import openai
 import streamlit as st
 from get_quiz import get_quiz_from_topic
 
@@ -8,9 +9,6 @@ topic = st.sidebar.text_input(
 )
 
 api_key = st.sidebar.text_input("OpenAI API key", type="password").strip()
-
-if not api_key:
-    st.error("Please enter a valid API key to proceed")
 
 # Initialize session state variables if they don't exist yet
 if "current_question" not in st.session_state:
@@ -25,7 +23,15 @@ if "current_question" not in st.session_state:
 def display_question():
     # Handle first case
     if len(st.session_state.questions) == 0:
-        st.session_state.questions.append(get_quiz_from_topic(topic, api_key))
+        try:
+            first_question = get_quiz_from_topic(topic, api_key)
+        except openai.error.AuthenticationError:
+            st.error(
+                "Please enter a valid OpenAI API key in the left sidebar to proceed. "
+                "To know how to obtain the key checkout readme for this project here: https://github.com/Dibakarroy1997/QuizWhizAI/blob/main/README.md"
+            )
+            return
+        st.session_state.questions.append(first_question)
 
     # Disable the submit button if the user has already answered this question
     submit_button_disabled = st.session_state.current_question in st.session_state.answers
@@ -79,7 +85,12 @@ def next_question():
 
     # If we've reached the end of the questions list, get a new question
     if st.session_state.current_question > len(st.session_state.questions) - 1:
-        st.session_state.questions.append(get_quiz_from_topic(topic, api_key))
+        try:
+            next_question = get_quiz_from_topic(topic, api_key)
+        except openai.error.AuthenticationError:
+            st.session_state.current_question -= 1
+            return
+        st.session_state.questions.append(next_question)
 
 
 # Define a function to go to the previous question
