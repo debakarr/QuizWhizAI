@@ -25,11 +25,16 @@ def get_quiz_from_topic(topic: str, api_key: str) -> Dict[str, str]:
     global chat_history
     openai.api_key = api_key
     current_chat = chat_history[:]
-    current_user_message = {"role": "user", "content": f"GET /generate-random-question/{topic}"}
+    current_user_message = {
+        "role": "user",
+        "content": f"GET /generate-random-question/{topic}",
+    }
     current_chat.append(current_user_message)
     chat_history.append(current_user_message)
 
-    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=current_chat)
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo", messages=current_chat
+    )
     quiz = response["choices"][0]["message"]["content"]
     current_assistent_message = {"role": "assistant", "content": quiz}
     chat_history.append(current_assistent_message)
