@@ -1,3 +1,5 @@
+import json
+
 import openai
 import streamlit as st
 from get_quiz import get_quiz_from_topic
@@ -34,7 +36,9 @@ def display_question():
         st.session_state.questions.append(first_question)
 
     # Disable the submit button if the user has already answered this question
-    submit_button_disabled = st.session_state.current_question in st.session_state.answers
+    submit_button_disabled = (
+        st.session_state.current_question in st.session_state.answers
+    )
 
     # Get the current question from the questions list
     question = st.session_state.questions[st.session_state.current_question]
@@ -46,7 +50,9 @@ def display_question():
     options = st.empty()
 
     # Display the radio button options and wait for the user to select an answer
-    user_answer = options.radio("Your answer:", question["options"], key=st.session_state.current_question)
+    user_answer = options.radio(
+        "Your answer:", question["options"], key=st.session_state.current_question
+    )
 
     # Display the submit button and disable it if necessary
     submit_button = st.button("Submit", disabled=submit_button_disabled)
@@ -54,12 +60,19 @@ def display_question():
     # If the user has already answered this question, display their previous answer
     if st.session_state.current_question in st.session_state.answers:
         index = st.session_state.answers[st.session_state.current_question]
-        options.radio("Your answer:", question["options"], key=float(st.session_state.current_question), index=index)
+        options.radio(
+            "Your answer:",
+            question["options"],
+            key=float(st.session_state.current_question),
+            index=index,
+        )
 
     # If the user clicks the submit button, check their answer and show the explanation
     if submit_button:
         # Record the user's answer in the session state
-        st.session_state.answers[st.session_state.current_question] = question["options"].index(user_answer)
+        st.session_state.answers[st.session_state.current_question] = question[
+            "options"
+        ].index(user_answer)
 
         # Check if the user's answer is correct and update the score
         if user_answer == question["answer"]:
@@ -100,6 +113,14 @@ def prev_question():
         st.session_state.current_question -= 1
         st.session_state.explanation = None
 
+
+# Create a sidebar with the download buttons to download current questions
+download_button = st.sidebar.download_button(
+    "Download Quiz Data",
+    data=json.dumps(st.session_state.questions, indent=4),
+    file_name="quiz_session.json",
+    mime="application/json",
+)
 
 # Create a 3-column layout for the Prev/Next buttons and the question display
 col1, col2, col3 = st.columns([1, 6, 1])
