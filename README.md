@@ -13,6 +13,8 @@
 
 **Streamlit App:** https://quizwhizai.streamlit.app
 
+![Streamlit App](https://i.imgur.com/tk0rXTT.gif)
+
 ---
 
 ## How to generate OpenAI API key
